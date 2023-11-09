@@ -3,7 +3,6 @@ package lista02;
 import javax.swing.*;
 
 public class Login {
-
     private JPanel panel1;
     private JTextField tf_user;
     private JTextField tf_pass;
@@ -15,6 +14,7 @@ public class Login {
         JFrame frame = new JFrame("Login");
         frame.setContentPane(panel1);
         frame.setResizable(false);
+        frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
@@ -28,7 +28,7 @@ public class Login {
             Banco db = Banco.getInstance();
 
             if (db.autentic(tf_user.getText(), tf_pass.getText())){
-                new Principal();
+                new Principal(tf_user.getText());
                 frame.dispose();
             } else {
                 JOptionPane.showMessageDialog(null, "Credenciais Inválidas");

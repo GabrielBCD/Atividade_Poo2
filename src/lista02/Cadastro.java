@@ -21,6 +21,7 @@ public class Cadastro {
         JFrame frame = new JFrame("Cadastro");
         frame.setContentPane(panel1);
         frame.setResizable(false);
+        frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
