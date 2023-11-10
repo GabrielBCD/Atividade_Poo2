@@ -1,18 +1,17 @@
-package lista02;
+package lista02.view;
 
-import com.mysql.jdbc.log.Log;
+import lista02.model.Banco;
 
 import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Objects;
 
 public class Cadastro {
-
     private JPanel panel1;
     private JTextField tf_name;
     private JTextField tf_username;
-    private JTextField tf_pass;
-    private JTextField tf_rpass;
+    private JPasswordField tf_pass;
+    private JPasswordField tf_rpass;
     private JButton cadastrarButton;
     private JButton limparButton;
     private JButton voltarButton;
@@ -21,9 +20,9 @@ public class Cadastro {
         JFrame frame = new JFrame("Cadastro");
         frame.setContentPane(panel1);
         frame.setResizable(false);
-        frame.setLocationRelativeTo(null);
+        frame.setSize(640, 480);
+        frame.setLocation(650, 300);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.pack();
         frame.setVisible(true);
 
         cadastrarButton.addActionListener(e -> {
@@ -32,8 +31,8 @@ public class Cadastro {
             ArrayList<String> usuario = new ArrayList<String>();
             String name = tf_name.getText();
             String username = tf_username.getText();
-            String pass = tf_pass.getText();
-            String rpass = tf_rpass.getText();
+            String pass = new String(tf_pass.getPassword());
+            String rpass = new String(tf_rpass.getPassword());
 
             usuario.add(name);
             usuario.add(username);
@@ -85,6 +84,4 @@ public class Cadastro {
             frame.dispose();
         });
     }
-
-
 }

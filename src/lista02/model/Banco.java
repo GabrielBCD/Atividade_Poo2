@@ -1,4 +1,4 @@
-package lista02;
+package lista02.model;
 
 import javax.swing.*;
 import java.sql.*;
@@ -79,5 +79,24 @@ public class Banco {
             System.out.println("Errou");
             return false;
         }
+    }
+
+    public String user_name(String user) {
+        Banco db = Banco.getInstance();
+        Connection connection = db.getCon();
+        String name = null;
+
+        try {
+            PreparedStatement statement = connection.prepareStatement("select name from usuarios where user_name = ?");
+            statement.setString(1, user);
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()){
+                name = rs.getString("name");
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Erro");
+        }
+        return name;
     }
 }
