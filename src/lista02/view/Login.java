@@ -1,5 +1,6 @@
 package lista02.view;
 
+import lista02.controller.Controller;
 import lista02.model.Banco;
 
 import javax.swing.*;
@@ -20,6 +21,8 @@ public class Login {
         frame.setLocation(650, 300);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
+        Controller controller = new Controller();
+
 
         btn_register.addActionListener(e -> {
             new Cadastro();
@@ -27,13 +30,8 @@ public class Login {
         });
 
         entrarButton.addActionListener(e ->{
-            Banco db = Banco.getInstance();
-
-            if (db.autentic(tf_user.getText(), new String (tf_pass.getPassword()))){
-                new Principal(tf_user.getText());
+            if (controller.LoginAutentic(tf_user.getText(), new String (tf_pass.getPassword()))){
                 frame.dispose();
-            } else {
-                JOptionPane.showMessageDialog(null, "Credenciais Inválidas");
             }
         });
 
@@ -42,6 +40,4 @@ public class Login {
             tf_pass.setText(null);
         });
     }
-
-
 }

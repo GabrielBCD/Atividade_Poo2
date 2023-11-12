@@ -22,8 +22,6 @@ public class Principal {
         Banco db = Banco.getInstance();
         txt_user.setText("Usuário: " + db.user_name(user));
 
-
-
         sairButton.addActionListener(e->{
             new Login();
             frame.dispose();
