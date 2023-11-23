@@ -109,8 +109,8 @@ public class ProjetoDB {
             statement.setString(11, projeto.getCelular());
             statement.setString(12, projeto.getMail());
             statement.setString(13, projeto.getTitulo());
-
             statement.executeUpdate();
+            JOptionPane.showMessageDialog(null,"Atualizado com sucesso");
         } catch (SQLException e) {
             e.printStackTrace();
         }

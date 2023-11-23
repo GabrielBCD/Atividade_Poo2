@@ -3,6 +3,7 @@ package lista02.view;
 import javax.swing.*;
 import java.nio.file.OpenOption;
 import java.util.List;
+import java.util.Objects;
 
 import lista02.controller.Controller;
 import lista02.model.Projeto;
@@ -47,6 +48,7 @@ public class Projetos {
         tf_agencia.setEnabled(true);
         tf_celular.setEnabled(true);
         tf_email.setEnabled(true);
+        ativo = true;
     }
 
     public void desativarCampos() {
@@ -62,6 +64,7 @@ public class Projetos {
         tf_agencia.setEnabled(false);
         tf_celular.setEnabled(false);
         tf_email.setEnabled(false);
+        ativo = false;
     }
 
     public void Limpar() {
@@ -141,10 +144,25 @@ public class Projetos {
                     tf_estudante.getText(), tf_matricula.getText(), tf_cpf.getText(), tf_n_banco.getText(), tf_conta_corrente.getText(),
                     tf_agencia.getText(), tf_celular.getText(), tf_email.getText())) {
                 JOptionPane.showMessageDialog(null, "Preencha todos os campos");
+
             } else {
-                projetoDB.addProjeto(tf_evento.getText(), tf_coodenador.getText(), tf_campus.getText(), tf_titulo.getText(),
-                        tf_estudante.getText(), tf_matricula.getText(), tf_cpf.getText(), tf_n_banco.getText(), tf_conta_corrente.getText(),
-                        tf_agencia.getText(), tf_celular.getText(), tf_email.getText());
+                boolean editar = false;
+                List<String> titulos = projetoDB.getTitulosProjetos();
+                for (String t: titulos){
+                    if (Objects.equals(tf_titulo.getText(), t)){
+                        editar = true; //E se o viado quiser alterar o titulo??? Tu vai criar um novo
+                        break;
+                    }
+                }
+                if (editar){
+                    //editar
+                    projetoDB.atualizarProjeto(projetoDB.getProjeto(tf_titulo.getText())); //Vc tá passando o mesmo de antes uai
+                } else {
+                    //novo
+                    projetoDB.addProjeto(tf_evento.getText(), tf_coodenador.getText(), tf_campus.getText(), tf_titulo.getText(),
+                            tf_estudante.getText(), tf_matricula.getText(), tf_cpf.getText(), tf_n_banco.getText(), tf_conta_corrente.getText(),
+                            tf_agencia.getText(), tf_celular.getText(), tf_email.getText());
+                }
                 Limpar();
             }
 
