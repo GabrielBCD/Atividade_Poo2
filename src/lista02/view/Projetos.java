@@ -1,6 +1,7 @@
 package lista02.view;
 
 import javax.swing.*;
+import javax.swing.text.JTextComponent;
 import java.nio.file.OpenOption;
 import java.util.List;
 import java.util.Objects;
@@ -35,51 +36,23 @@ public class Projetos {
     private JButton salvarButton;
     private JButton cancelarButton;
 
+    public List<JTextComponent> getCampos() {
+        return List.of(tf_evento, tf_coodenador, tf_campus, tf_titulo, tf_estudante, tf_matricula, tf_cpf, tf_n_banco, tf_conta_corrente, tf_agencia, tf_celular, tf_email);
+    }
+
     public void ativarCampos() {
-        tf_evento.setEnabled(true);
-        tf_coodenador.setEnabled(true);
-        tf_campus.setEnabled(true);
-        tf_titulo.setEnabled(true);
-        tf_estudante.setEnabled(true);
-        tf_matricula.setEnabled(true);
-        tf_cpf.setEnabled(true);
-        tf_n_banco.setEnabled(true);
-        tf_conta_corrente.setEnabled(true);
-        tf_agencia.setEnabled(true);
-        tf_celular.setEnabled(true);
-        tf_email.setEnabled(true);
-        ativo = true;
+        List<JTextComponent> lista = getCampos();
+        lista.forEach(campo -> campo.setEnabled(true));
     }
 
     public void desativarCampos() {
-        tf_evento.setEnabled(false);
-        tf_coodenador.setEnabled(false);
-        tf_campus.setEnabled(false);
-        tf_titulo.setEnabled(false);
-        tf_estudante.setEnabled(false);
-        tf_matricula.setEnabled(false);
-        tf_cpf.setEnabled(false);
-        tf_n_banco.setEnabled(false);
-        tf_conta_corrente.setEnabled(false);
-        tf_agencia.setEnabled(false);
-        tf_celular.setEnabled(false);
-        tf_email.setEnabled(false);
-        ativo = false;
+        List<JTextComponent> lista = getCampos();
+        lista.forEach(campo -> campo.setEnabled(false));
     }
 
     public void Limpar() {
-        tf_evento.setText(null);
-        tf_coodenador.setText(null);
-        tf_campus.setText(null);
-        tf_titulo.setText(null);
-        tf_estudante.setText(null);
-        tf_matricula.setText(null);
-        tf_cpf.setText(null);
-        tf_n_banco.setText(null);
-        tf_conta_corrente.setText(null);
-        tf_agencia.setText(null);
-        tf_celular.setText(null);
-        tf_email.setText(null);
+        List<JTextComponent> lista = getCampos();
+        lista.forEach(campo -> campo.setText(null));
     }
 
     public void atualizaJlist(List<String> projetos) {
@@ -110,10 +83,10 @@ public class Projetos {
         editarButton.addActionListener(e -> {
             String projetoSelecionado = jlist.getSelectedValue();
             System.out.println(jlist.getSelectedValue());
-            if (projetoSelecionado == null){
+            if (projetoSelecionado == null) {
                 JOptionPane.showMessageDialog(null, "Não é possivel editar sem selecionar\num projeto");
             } else {
-                Projeto p =  projetoDB.getProjeto(projetoSelecionado);
+                Projeto p = projetoDB.getProjeto(projetoSelecionado);
                 ativarCampos();
 
                 tf_evento.setText(p.getEvento());
@@ -148,15 +121,20 @@ public class Projetos {
             } else {
                 boolean editar = false;
                 List<String> titulos = projetoDB.getTitulosProjetos();
-                for (String t: titulos){
-                    if (Objects.equals(tf_titulo.getText(), t)){
+                for (String t : titulos) {
+                    if (Objects.equals(tf_titulo.getText(), t)) {
                         editar = true; //E se o viado quiser alterar o titulo??? Tu vai criar um novo
                         break;
                     }
                 }
-                if (editar){
+                if (editar) {
                     //editar
-                    projetoDB.atualizarProjeto(projetoDB.getProjeto(tf_titulo.getText())); //Vc tá passando o mesmo de antes uai
+                    List<JTextComponent> lista = getCampos();
+                    Projeto edit = new Projeto(tf_evento.getText(), tf_coodenador.getText(), tf_campus.getText(), tf_titulo.getText(),
+                            tf_estudante.getText(), tf_matricula.getText(), tf_cpf.getText(), tf_n_banco.getText(), tf_conta_corrente.getText(),
+                            tf_agencia.getText(), tf_celular.getText(), tf_email.getText());
+                    projetoDB.atualizarProjeto(edit);
+
                 } else {
                     //novo
                     projetoDB.addProjeto(tf_evento.getText(), tf_coodenador.getText(), tf_campus.getText(), tf_titulo.getText(),

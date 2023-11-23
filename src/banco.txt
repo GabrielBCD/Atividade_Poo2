@@ -24,4 +24,4 @@ agencia
 celular
 email
 
-CREATE TABLE `poo2_lista2`.`projetos` (`id` INT NOT NULL AUTO_INCREMENT , `evento` INT NOT NULL , `coordenador` VARCHAR(255) NOT NULL , `campus` VARCHAR(255) NOT NULL , `titulo` VARCHAR(255) NOT NULL , `estudante` VARCHAR NOT NULL , `n_matricula` INT NOT NULL , `cpf` INT NOT NULL , `n_banco` INT NOT NULL , `conta_corrente` INT NOT NULL , `agencia` INT NOT NULL , `celular` INT NOT NULL , `email` VARCHAR(255) NOT NULL , PRIMARY KEY (`id`));
+CREATE TABLE `poo2_lista2`.`projetos` (`id` INT NOT NULL AUTO_INCREMENT , `evento` INT NOT NULL , `coordenador` VARCHAR(255) NOT NULL , `campus` VARCHAR(255) NOT NULL , `titulo` VARCHAR(255) NOT NULL , `estudante` VARCHAR(255) NOT NULL , `n_matricula` INT NOT NULL , `cpf` INT NOT NULL , `n_banco` INT NOT NULL , `conta_corrente` INT NOT NULL , `agencia` INT NOT NULL , `celular` INT NOT NULL , `email` VARCHAR(255) NOT NULL , PRIMARY KEY (`id`));
