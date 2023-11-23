@@ -2,8 +2,10 @@ package lista02.controller;
 import lista02.model.Banco;
 import lista02.view.Login;
 import lista02.view.Principal;
+import lista02.view.Projetos;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -50,9 +52,13 @@ public class Controller {
         return false;
     }
 
-    public boolean statusCamposProjetos(){
-
-        return false;
+    public boolean statusCamposProjetos(String... campos){
+        for (String campo : campos) {
+            if (Objects.equals(campo, "")) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public Controller() {
