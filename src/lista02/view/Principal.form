@@ -41,11 +41,11 @@
                       <grid id="b0143" class="javax.swing.JMenu" layout-manager="FlowLayout" hgap="5" vgap="5" flow-align="1">
                         <constraints/>
                         <properties>
-                          <text value="Produtos"/>
+                          <text value="Projetos"/>
                         </properties>
                         <border type="none"/>
                         <children>
-                          <component id="c55f5" class="javax.swing.JMenuItem">
+                          <component id="c55f5" class="javax.swing.JMenuItem" binding="Cadastrar">
                             <constraints/>
                             <properties>
                               <text value="Cadastrar"/>

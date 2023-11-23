@@ -8,6 +8,7 @@ public class Principal {
     private JButton sairButton;
     private JPanel panel1;
     private JLabel txt_user;
+    private JMenuItem Cadastrar;
     String name;
 
     public Principal(String user) {
@@ -22,10 +23,17 @@ public class Principal {
         Banco db = Banco.getInstance();
         txt_user.setText("Usuário: " + db.user_name(user));
 
+
+
         sairButton.addActionListener(e->{
             new Login();
             frame.dispose();
         });
+
+        Cadastrar.addActionListener((e->{
+            new Projetos();
+            frame.dispose();
+        }));
 
 
     }
