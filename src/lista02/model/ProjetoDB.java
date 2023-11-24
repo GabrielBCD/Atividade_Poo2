@@ -46,7 +46,6 @@ public class ProjetoDB {
             while (rs.next()) {
                 String projeto = rs.getString("titulo");
                 projetos.add(projeto);
-
             }
 
         } catch (SQLException e) {
@@ -79,8 +78,9 @@ public class ProjetoDB {
                 String agencia = rs.getString("agencia");
                 String celular = rs.getString("celular");
                 String email = rs.getString("email");
-
-                return new Projeto(evento, coordenador, campus, titulo, estudante, matricula, cpf, banco, contacorrente, agencia, celular, email);
+                Projeto p = new Projeto(evento, coordenador, campus, titulo, estudante, matricula, cpf, banco, contacorrente, agencia, celular, email);
+                p.setId(rs.getInt("id"));
+                return p;
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -88,13 +88,13 @@ public class ProjetoDB {
         return null;
     }
 
-    public void atualizarProjeto(Projeto projeto) {
+    public void atualizarProjeto(Projeto projeto, int id) {
         Banco db = Banco.getInstance();
         Connection connection = db.getCon();
 
         try {
             String sql = "UPDATE projetos SET evento = ?, coordenador = ?, campus = ?, titulo = ?, estudante = ?, n_matricula = ?," +
-                    "cpf = ?, n_banco = ?, conta_corrente = ?, agencia = ?, celular = ?, email = ? WHERE titulo = ?";
+                    "cpf = ?, n_banco = ?, conta_corrente = ?, agencia = ?, celular = ?, email = ? WHERE id = ?";
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, projeto.getEvento());
             statement.setString(2, projeto.getCoordenador());
@@ -108,13 +108,28 @@ public class ProjetoDB {
             statement.setString(10, projeto.getAgencia());
             statement.setString(11, projeto.getCelular());
             statement.setString(12, projeto.getMail());
-            statement.setString(13, projeto.getTitulo());
+            statement.setInt(13, id);
             statement.executeUpdate();
-            JOptionPane.showMessageDialog(null,"Atualizado com sucesso");
+            JOptionPane.showMessageDialog(null, "Atualizado com sucesso");
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
 
+    public boolean vericarId(int id) {
+        Banco db = Banco.getInstance();
+        Connection connection = db.getCon();
+
+        try {
+            String sql = "SELECT id FROM projetos WHERE id = ?";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setInt(1, id);
+            ResultSet rs = statement.executeQuery();
+            return rs.next();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }
 

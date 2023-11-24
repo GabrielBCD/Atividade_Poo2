@@ -1,6 +1,7 @@
 package lista02.model;
 
 public class Projeto {
+    int id;
     String evento;
     String coordenador;
     String campus;
@@ -27,6 +28,14 @@ public class Projeto {
         this.agencia = agencia;
         this.celular = celular;
         this.mail = mail;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getEvento() {

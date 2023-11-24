@@ -11,7 +11,7 @@ import lista02.model.Projeto;
 import lista02.model.ProjetoDB;
 
 public class Projetos {
-
+    int id_selecionado;
     public boolean ativo = false;
     private JPanel panel1;
     private JTextField tf_evento;
@@ -78,6 +78,8 @@ public class Projetos {
 
         novoButton.addActionListener(e -> {
             ativarCampos();
+            Limpar();
+            id_selecionado = 0;
         });
 
         editarButton.addActionListener(e -> {
@@ -101,6 +103,8 @@ public class Projetos {
                 tf_agencia.setText(p.getTitulo());
                 tf_celular.setText(p.getCelular());
                 tf_email.setText(p.getMail());
+
+                id_selecionado = projetoDB.getProjeto(tf_titulo.getText()).getId();
             }
         });
 
@@ -120,28 +124,27 @@ public class Projetos {
 
             } else {
                 boolean editar = false;
-                List<String> titulos = projetoDB.getTitulosProjetos();
-                for (String t : titulos) {
-                    if (Objects.equals(tf_titulo.getText(), t)) {
-                        editar = true; //E se o viado quiser alterar o titulo??? Tu vai criar um novo
-                        break;
-                    }
+                if (projetoDB.vericarId(id_selecionado)){
+                    editar = true;
                 }
+
                 if (editar) {
                     //editar
-                    List<JTextComponent> lista = getCampos();
                     Projeto edit = new Projeto(tf_evento.getText(), tf_coodenador.getText(), tf_campus.getText(), tf_titulo.getText(),
                             tf_estudante.getText(), tf_matricula.getText(), tf_cpf.getText(), tf_n_banco.getText(), tf_conta_corrente.getText(),
                             tf_agencia.getText(), tf_celular.getText(), tf_email.getText());
-                    projetoDB.atualizarProjeto(edit);
+                    projetoDB.atualizarProjeto(edit, id_selecionado);
+                    desativarCampos();
 
                 } else {
                     //novo
                     projetoDB.addProjeto(tf_evento.getText(), tf_coodenador.getText(), tf_campus.getText(), tf_titulo.getText(),
                             tf_estudante.getText(), tf_matricula.getText(), tf_cpf.getText(), tf_n_banco.getText(), tf_conta_corrente.getText(),
                             tf_agencia.getText(), tf_celular.getText(), tf_email.getText());
+                    desativarCampos();
                 }
                 Limpar();
+                id_selecionado = 0;
             }
 
             atualizaJlist(projetoDB.getTitulosProjetos());
@@ -151,6 +154,7 @@ public class Projetos {
         cancelarButton.addActionListener(e -> {
             Limpar();
             desativarCampos();
+            id_selecionado = 0;
         });
 
     }
