@@ -131,5 +131,21 @@ public class ProjetoDB {
         }
         return false;
     }
+
+    public boolean deletarProjeto(int id_selecionado) {
+        Banco db = Banco.getInstance();
+        Connection connection = db.getCon();
+
+        try {
+            String sql = "DELETE FROM projetos WHERE id = ?";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setInt(1, id_selecionado);
+            statement.executeUpdate();
+            JOptionPane.showMessageDialog(null,"Projeto Deletado com Sucesso");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }
 

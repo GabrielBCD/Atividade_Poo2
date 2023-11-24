@@ -109,6 +109,17 @@ public class Projetos {
         });
 
         excluirButton.addActionListener(e -> {
+            int opt = JOptionPane.showConfirmDialog(null, "Deseja Excluir o Projeto?");
+            if (opt == JOptionPane.YES_NO_OPTION){
+                String projetoSelecionado = jlist.getSelectedValue();
+                id_selecionado = projetoDB.getProjeto(projetoSelecionado).getId();
+                projetoDB.deletarProjeto(id_selecionado);
+                id_selecionado = 0;
+                atualizaJlist(projetoDB.getTitulosProjetos());
+            } else {
+                JOptionPane.showMessageDialog(null, "Projeto não foi excluido");
+            }
+
 
         });
 
@@ -157,5 +168,8 @@ public class Projetos {
             id_selecionado = 0;
         });
 
+        pesquisaButton.addActionListener(e -> {
+
+        });
     }
 }
