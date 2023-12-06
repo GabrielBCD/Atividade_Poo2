@@ -1,9 +1,17 @@
 package lista02.model;
 
 import javax.swing.*;
+import java.awt.*;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+
+
+import com.itextpdf.text.Document;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.*;
 
 public class ProjetoDB {
 
@@ -141,11 +149,91 @@ public class ProjetoDB {
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setInt(1, id_selecionado);
             statement.executeUpdate();
-            JOptionPane.showMessageDialog(null,"Projeto Deletado com Sucesso");
+            JOptionPane.showMessageDialog(null, "Projeto Deletado com Sucesso");
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return false;
+    }
+
+    public List<Projeto> getProjetos() {
+        Banco db = Banco.getInstance();
+        Connection connection = db.getCon();
+        List<Projeto> projetos = new ArrayList<>();
+
+
+        try {
+            String sql = "SELECT * FROM projetos";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            ResultSet rs = statement.executeQuery();
+
+            while (rs.next()) {
+                String evento = rs.getString("evento");
+                String coordenador = rs.getString("coordenador");
+                String campus = rs.getString("campus");
+                String titulo = rs.getString("titulo");
+                String estudante = rs.getString("estudante");
+                String matricula = rs.getString("n_matricula");
+                String cpf = rs.getString("cpf");
+                String banco = rs.getString("n_banco");
+                String contacorrente = rs.getString("conta_corrente");
+                String agencia = rs.getString("agencia");
+                String celular = rs.getString("celular");
+                String email = rs.getString("email");
+                Projeto p = new Projeto(evento, coordenador, campus, titulo, estudante, matricula, cpf, banco, contacorrente, agencia, celular, email);
+                projetos.add(p);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return projetos;
+    }
+
+    public void gerarPDF() {
+        //Biblioteca Document importada de: import com.itextpdf.text.Document;
+        Document document = new Document();
+
+        //gerar o Documento PDF
+        try {
+            //Criando documento
+            PdfWriter.getInstance(document, new FileOutputStream("Relatório Projeto"));
+            document.open();
+
+            //Criando Tabela
+            PdfPTable tabela = new PdfPTable(4);
+            PdfPCell col1 = new PdfPCell(new Paragraph("Titulo"));
+            tabela.addCell(col1);
+            PdfPCell col2 = new PdfPCell(new Paragraph("Matricula"));
+            tabela.addCell(col2);
+            PdfPCell col3 = new PdfPCell(new Paragraph("Estudante"));
+            tabela.addCell(col3);
+            PdfPCell col4 = new PdfPCell(new Paragraph("Coordenador"));
+            tabela.addCell(col4);
+
+            //Adicionando conteudo
+            List<Projeto> projetos = getProjetos();
+            for (Projeto p : projetos){
+                tabela.addCell(p.getTitulo());
+                tabela.addCell(p.getN_matricula());
+                tabela.addCell(p.getEstudante());
+                tabela.addCell(p.getCoordenador());
+            }
+
+            document.add(tabela);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Erro Inesperado");
+        } finally {
+            //Sempre fechando o documento
+            document.close();
+        }
+
+        //abrir o documento automaticamente
+        try {
+            Desktop.getDesktop().open(new File("Relatório Projeto"));
+        } catch (Exception e) {
+            System.out.println(e);
+        }
     }
 }
 

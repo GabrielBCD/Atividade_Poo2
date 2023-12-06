@@ -2,11 +2,10 @@ package lista02.view;
 
 import javax.swing.*;
 import javax.swing.text.JTextComponent;
-import java.nio.file.OpenOption;
 import java.util.List;
-import java.util.Objects;
 
 import lista02.controller.Controller;
+import lista02.model.Banco;
 import lista02.model.Projeto;
 import lista02.model.ProjetoDB;
 
@@ -35,6 +34,7 @@ public class Projetos {
     private JButton pesquisaButton;
     private JButton salvarButton;
     private JButton cancelarButton;
+    private JButton gerarRelatorioButton;
 
     public List<JTextComponent> getCampos() {
         return List.of(tf_evento, tf_coodenador, tf_campus, tf_titulo, tf_estudante, tf_matricula, tf_cpf, tf_n_banco, tf_conta_corrente, tf_agencia, tf_celular, tf_email);
@@ -110,7 +110,7 @@ public class Projetos {
 
         excluirButton.addActionListener(e -> {
             int opt = JOptionPane.showConfirmDialog(null, "Deseja Excluir o Projeto?");
-            if (opt == JOptionPane.YES_NO_OPTION){
+            if (opt == JOptionPane.YES_NO_OPTION) {
                 String projetoSelecionado = jlist.getSelectedValue();
                 id_selecionado = projetoDB.getProjeto(projetoSelecionado).getId();
                 projetoDB.deletarProjeto(id_selecionado);
@@ -119,8 +119,6 @@ public class Projetos {
             } else {
                 JOptionPane.showMessageDialog(null, "Projeto não foi excluido");
             }
-
-
         });
 
         limparButton.addActionListener(e -> {
@@ -135,7 +133,7 @@ public class Projetos {
 
             } else {
                 boolean editar = false;
-                if (projetoDB.vericarId(id_selecionado)){
+                if (projetoDB.vericarId(id_selecionado)) {
                     editar = true;
                 }
 
@@ -169,7 +167,11 @@ public class Projetos {
         });
 
         pesquisaButton.addActionListener(e -> {
+            atualizaJlist(projetoDB.getTitulosProjetos());
+        });
 
+        gerarRelatorioButton.addActionListener(e -> {
+            projetoDB.gerarPDF();
         });
     }
 }
