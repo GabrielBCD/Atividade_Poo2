@@ -197,7 +197,7 @@ public class ProjetoDB {
         //gerar o Documento PDF
         try {
             //Criando documento
-            PdfWriter.getInstance(document, new FileOutputStream("Relatório Projeto"));
+            PdfWriter.getInstance(document, new FileOutputStream("Relatorio Projeto"));
             document.open();
 
             //Criando Tabela
@@ -230,7 +230,7 @@ public class ProjetoDB {
 
         //abrir o documento automaticamente
         try {
-            Desktop.getDesktop().open(new File("Relatório Projeto"));
+            Desktop.getDesktop().open(new File("Relatorio Projeto"));
         } catch (Exception e) {
             System.out.println(e);
         }
