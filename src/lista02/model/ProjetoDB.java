@@ -1,17 +1,23 @@
 package lista02.model;
 
+import com.itextpdf.text.Document;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
-
-import com.itextpdf.text.Document;
-import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.pdf.*;
+import java.util.Objects;
 
 public class ProjetoDB {
 
@@ -49,6 +55,28 @@ public class ProjetoDB {
 
         try {
             PreparedStatement statement = connection.prepareStatement("SELECT * FROM projetos");
+            ResultSet rs = statement.executeQuery();
+
+            while (rs.next()) {
+                String projeto = rs.getString("titulo");
+                projetos.add(projeto);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Erro ao obter projetos do banco de dados");
+            e.printStackTrace();
+        }
+        return projetos;
+    }
+
+    public List<String> getTitulosProjetosPesquisa(String titulo) {
+        List<String> projetos = new ArrayList<>();
+        Banco db = Banco.getInstance();
+        Connection connection = db.getCon();
+
+        try {
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM projetos where titulo = ?");
+            statement.setString(1, titulo);
             ResultSet rs = statement.executeQuery();
 
             while (rs.next()) {
@@ -190,18 +218,36 @@ public class ProjetoDB {
         return projetos;
     }
 
-    public void gerarPDF() {
+    public void gerarPDF(List<String> titulos, boolean tipo, String pesquisa) {
         //Biblioteca Document importada de: import com.itextpdf.text.Document;
         Document document = new Document();
 
+        for (String t : titulos) {
+            System.out.println(t);
+        }
         //gerar o Documento PDF
         try {
             //Criando documento
-            PdfWriter.getInstance(document, new FileOutputStream("Relatorio Projeto"));
+            PdfWriter.getInstance(document, new FileOutputStream("Relatorio.pdf"));
             document.open();
 
-            //Criando Tabela
+            //Adicionando Imagem
+            com.itextpdf.text.Image img = com.itextpdf.text.Image.getInstance("C:\\Users\\User\\Documents\\Atividades\\poo2\\Atividade_Poo2\\src\\imagens\\if-logo2.png");
+            img.setAlignment(Element.ALIGN_CENTER);
+            img.scaleToFit(150, 150);
+            document.add(img);
+
+            //Cabeçalho
+            document.add(new Paragraph("Gestão > Projetos > Cadastro"));
+            document.add(new Paragraph("Relatório Projetos Cadastrados."));
+            document.add(new Paragraph("Parâmetros: "));
+            document.add(new Paragraph("    "));
+
+            //Criando e configurando a Tabela
             PdfPTable tabela = new PdfPTable(4);
+
+            tabela.setWidthPercentage(100);
+
             PdfPCell col1 = new PdfPCell(new Paragraph("Titulo"));
             tabela.addCell(col1);
             PdfPCell col2 = new PdfPCell(new Paragraph("Matricula"));
@@ -211,14 +257,30 @@ public class ProjetoDB {
             PdfPCell col4 = new PdfPCell(new Paragraph("Coordenador"));
             tabela.addCell(col4);
 
-            //Adicionando conteudo
-            List<Projeto> projetos = getProjetos();
-            for (Projeto p : projetos){
-                tabela.addCell(p.getTitulo());
-                tabela.addCell(p.getN_matricula());
-                tabela.addCell(p.getEstudante());
-                tabela.addCell(p.getCoordenador());
+
+            //Adicionando conteudo na tabela
+            if (!tipo) {
+                List<Projeto> projetos = getProjetos();
+                //relatório completo
+                for (Projeto p : projetos) {
+                    if (Objects.equals(p.getTitulo(), pesquisa)) {
+                        tabela.addCell(p.getTitulo());
+                        tabela.addCell(p.getN_matricula());
+                        tabela.addCell(p.getEstudante());
+                        tabela.addCell(p.getCoordenador());
+                    }
+                }
+            } else{
+                List<Projeto> projetos = getProjetos();
+                //relatório apenas pesquisa
+                for (Projeto p : projetos) {
+                    tabela.addCell(p.getTitulo());
+                    tabela.addCell(p.getN_matricula());
+                    tabela.addCell(p.getEstudante());
+                    tabela.addCell(p.getCoordenador());
+                }
             }
+
 
             document.add(tabela);
         } catch (Exception e) {
@@ -230,7 +292,7 @@ public class ProjetoDB {
 
         //abrir o documento automaticamente
         try {
-            Desktop.getDesktop().open(new File("Relatorio Projeto"));
+            Desktop.getDesktop().open(new File("Relatorio.pdf"));
         } catch (Exception e) {
             System.out.println(e);
         }

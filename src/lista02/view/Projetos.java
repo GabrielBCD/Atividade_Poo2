@@ -1,17 +1,20 @@
 package lista02.view;
 
-import javax.swing.*;
-import javax.swing.text.JTextComponent;
-import java.util.List;
-
 import lista02.controller.Controller;
-import lista02.model.Banco;
 import lista02.model.Projeto;
 import lista02.model.ProjetoDB;
+
+import javax.swing.*;
+import javax.swing.text.JTextComponent;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 public class Projetos {
     int id_selecionado;
     public boolean ativo = false;
+    public boolean tipo_pesq = true;
+    public String Titulo_selec;
     private JPanel panel1;
     private JTextField tf_evento;
     private JTextField tf_cpf;
@@ -35,6 +38,7 @@ public class Projetos {
     private JButton salvarButton;
     private JButton cancelarButton;
     private JButton gerarRelatorioButton;
+    private JButton limpaPesquisaButton;
 
     public List<JTextComponent> getCampos() {
         return List.of(tf_evento, tf_coodenador, tf_campus, tf_titulo, tf_estudante, tf_matricula, tf_cpf, tf_n_banco, tf_conta_corrente, tf_agencia, tf_celular, tf_email);
@@ -61,6 +65,19 @@ public class Projetos {
             tituloN.addElement(x);
         }
         jlist.setModel(tituloN);
+    }
+
+    public List<String> obterValoresDaJList() {
+        ListModel<String> model = jlist.getModel();
+        int size = model.getSize();
+        List<String> titulos = new ArrayList<>();
+
+        for (int i = 0; i < size; i++) {
+            String valor = model.getElementAt(i);
+            titulos.add(valor);
+        }
+
+        return titulos;
     }
 
     public Projetos() {
@@ -167,11 +184,25 @@ public class Projetos {
         });
 
         pesquisaButton.addActionListener(e -> {
+            if (Objects.equals(tf_pesquisa.getText(), "")) {
+                JOptionPane.showMessageDialog(null, "Nenhuma Pesquisa foi feita.");
+            } else {
+                atualizaJlist(projetoDB.getTitulosProjetosPesquisa(tf_pesquisa.getText()));
+                Titulo_selec =tf_pesquisa.getText();
+                tipo_pesq = false;
+            }
+
+        });
+
+        limpaPesquisaButton.addActionListener(e -> {
             atualizaJlist(projetoDB.getTitulosProjetos());
+            Titulo_selec = null;
+            tipo_pesq = true;
+            tf_pesquisa.setText(null);
         });
 
         gerarRelatorioButton.addActionListener(e -> {
-            projetoDB.gerarPDF();
+            projetoDB.gerarPDF(obterValoresDaJList(), tipo_pesq, Titulo_selec);
         });
     }
 }
